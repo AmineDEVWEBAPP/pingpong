@@ -1,6 +1,7 @@
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:pingpong/controller/ball_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/const/enum.dart';
 import '../core/utils/methodes.dart';
@@ -10,11 +11,24 @@ class GameController extends GetxController {
   late final Ticker ticker;
   late BallController bContr;
   double paddleX = 0;
+  late SharedPreferences _sh;
+  late int topScore;
+  late bool allowSounde;
+  double iconDrawerTurns = 0;
+  int score = 0;
+
+  void drawerAnimation() {
+    iconDrawerTurns == 0 ? iconDrawerTurns = 0.3 : iconDrawerTurns = 0;
+    update(['drawerIcon']);
+  }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     bContr = BallController(this);
+    _sh = await SharedPreferences.getInstance();
+    topScore = _sh.getInt('topScore') ?? 0;
+    allowSounde = _sh.getBool('soundeAuth') ?? true;
   }
 
   void start() {
@@ -28,7 +42,8 @@ class GameController extends GetxController {
   void restart() {
     logger('restart');
     status = GameStatus.pause;
-    update(['controllerButton']);
+    score = 0;
+    update(['controllerButton', 'score']);
     bContr.reInit();
     ticker.start();
   }
@@ -38,5 +53,16 @@ class GameController extends GetxController {
     status = GameStatus.resume;
     update(['controllerButton']);
     ticker.stop();
+  }
+
+  Future<void> setTopScore(int score) async {
+    logger('set Top Score: $score');
+    topScore = score;
+    await _sh.setInt('topScore', score);
+  }
+
+  Future<void> setSoundeAuth(bool auth) async {
+    allowSounde = auth;
+    await _sh.setBool('soundeAuth', auth);
   }
 }

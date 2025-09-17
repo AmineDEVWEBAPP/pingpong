@@ -1,0 +1,63 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:flutter/material.dart';
+
+import '../../../core/config/theme_config.dart';
+
+class ExpandedDialog extends StatefulWidget {
+  const ExpandedDialog({
+    super.key,
+    required this.isOpen,
+    required this.data,
+    required this.onTap,
+    required this.groupValue,
+  });
+  final bool isOpen;
+  final List<Map<String, dynamic>> data;
+  final void Function(dynamic v) onTap;
+  final dynamic groupValue;
+
+  @override
+  State<ExpandedDialog> createState() => _ExpandedDialogState();
+}
+
+class _ExpandedDialogState extends State<ExpandedDialog> {
+  final ThemeData _theme = ThemeConfig.theme;
+
+  dynamic _groupValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: widget.isOpen ? null : 0,
+      decoration: BoxDecoration(
+        color: _theme.cardColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(5),
+          bottomRight: Radius.circular(5),
+        ),
+      ),
+      child: Column(
+        children: List.generate(
+          widget.data.length,
+          (i) => RadioListTile(
+            value: widget.data[i].values.elementAt(0),
+            groupValue: _groupValue ?? widget.groupValue,
+            onChanged: (v) async {
+              _groupValue = v;
+              setState(() {});
+              await Future.delayed(const Duration(milliseconds: 250));
+              widget.onTap(v);
+              _groupValue = widget.groupValue;
+            },
+            title: Text(
+              widget.data[i].keys.elementAt(0),
+              style: _theme.textTheme.bodyMedium,
+            ),
+            fillColor: WidgetStatePropertyAll(_theme.secondaryHeaderColor),
+          ),
+        ),
+      ),
+    );
+  }
+}

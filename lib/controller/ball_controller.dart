@@ -40,12 +40,17 @@ class BallController {
         x.value >= _gContr.paddleX - 25 && x.value <= _gContr.paddleX + 25;
     if (y > 0 && !_yd.isNegative && atPaddle) {
       _yd = -_yd;
+      _gContr.score++;
+      _gContr.update(['score']);
     }
     // if the ball is not at paddle it will loss
     if (y > 100) {
       _gContr.status = GameStatus.restart;
       _gContr.update(['controllerButton']);
       _gContr.ticker.stop();
+      if (_gContr.score > _gContr.topScore) {
+        _gContr.setTopScore(_gContr.score);
+      }
     }
     // lift
     if (x < -_sides && _xd.isNegative) {
