@@ -11,7 +11,7 @@ class BallController {
   RxDouble y = 0.0.obs;
   double _xd = 5;
   double _yd = -5;
-  double _speed = 15;
+  double _speed = 40;
   final double _sides = 195;
   final double topSide = -520;
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -47,6 +47,11 @@ class BallController {
     // bottom
     bool atPaddle =
         x.value >= _gContr.paddleX - 25 && x.value <= _gContr.paddleX + 25;
+    if (y.value + _yd > 0 && atPaddle) {
+      _yd = -_speed;
+      _gContr.score++;
+      _gContr.update(['score']);
+    }
     if (y.value > 10 && atPaddle == false) {
       _gContr.status = GameStatus.restart;
       _gContr.update(['controllerButton']);
@@ -55,11 +60,7 @@ class BallController {
         _gContr.setTopScore(_gContr.score);
       }
     }
-    if (y.value > 0 && atPaddle) {
-      _yd = -_speed;
-      _gContr.score++;
-      _gContr.update(['score']);
-    }
+
     // lift
     if (x.value < -_sides && _xd.isNegative) {
       _xd = _speed;
