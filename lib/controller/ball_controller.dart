@@ -11,6 +11,7 @@ class BallController {
   RxDouble y = 0.0.obs;
   double _xd = 5;
   double _yd = -5;
+  double _speed = 15;
   final double _sides = 195;
   final double topSide = -520;
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -18,25 +19,27 @@ class BallController {
   BallController(this._gContr);
 
   reInit() {
+    _speed = 5;
     x.value = 0.0;
     y.value = 0.0;
-    _xd = 5;
-    _yd = -5;
+    _xd = _speed;
+    _yd = -_speed;
   }
 
   void moveStep() {
     if (_gContr.status == GameStatus.pause) {
+      _checkSides();
       x.value += _xd;
       y.value += _yd;
-      _checkSides();
+      _incrementSpeed();
     }
   }
 
   // check if ball touch sides or paddle or top
   void _checkSides() {
     // top
-    if (y < topSide && _yd.isNegative) {
-      _yd = -_yd;
+    if (y.value < topSide && _yd.isNegative) {
+      _yd = _speed;
       if (_gContr.allowSound) {
         _audioPlayer.play(AssetSource(popPath));
       }
@@ -44,13 +47,7 @@ class BallController {
     // bottom
     bool atPaddle =
         x.value >= _gContr.paddleX - 25 && x.value <= _gContr.paddleX + 25;
-    if (y > 0 && !_yd.isNegative && atPaddle) {
-      _yd = -_yd;
-      _gContr.score++;
-      _gContr.update(['score']);
-    }
-    // if the ball is not at paddle it will loss
-    if (y > 100) {
+    if (y.value > 10 && atPaddle == false) {
       _gContr.status = GameStatus.restart;
       _gContr.update(['controllerButton']);
       _gContr.ticker.stop();
@@ -58,13 +55,20 @@ class BallController {
         _gContr.setTopScore(_gContr.score);
       }
     }
+    if (y.value > 0 && atPaddle) {
+      _yd = -_speed;
+      _gContr.score++;
+      _gContr.update(['score']);
+    }
     // lift
-    if (x < -_sides && _xd.isNegative) {
-      _xd = -_xd;
+    if (x.value < -_sides && _xd.isNegative) {
+      _xd = _speed;
     }
     // right
-    if (x > _sides && !_xd.isNegative) {
-      _xd = -_xd;
+    if (x.value > _sides && !_xd.isNegative) {
+      _xd = -_speed;
     }
   }
+
+  void _incrementSpeed() {}
 }

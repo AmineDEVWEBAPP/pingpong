@@ -57,7 +57,7 @@ class _GameDrawerState extends State<GameDrawer> {
             onChoice: (auth) {
               _openSound = false;
               setState(() {});
-              _gContr.setSoundeAuth(auth);
+              _gContr.setSoundAuth(auth);
             },
             data: [
               {'turn on': true},

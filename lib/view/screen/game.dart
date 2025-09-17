@@ -22,7 +22,9 @@ class GamePage extends StatelessWidget {
       key: _scaffoldState,
 
       onDrawerChanged: (isOpened) {
-        _gContr.stop();
+        if (_gContr.status == GameStatus.pause) {
+          _gContr.stop();
+        }
         _gContr.drawerAnimation();
       },
       drawer: GameDrawer(),

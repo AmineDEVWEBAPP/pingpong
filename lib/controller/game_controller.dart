@@ -61,7 +61,7 @@ class GameController extends GetxController {
     await _sh.setInt('topScore', score);
   }
 
-  Future<void> setSoundeAuth(bool auth) async {
+  Future<void> setSoundAuth(bool auth) async {
     logger('change sound auth to $auth');
     allowSound = auth;
     await _sh.setBool('soundAuth', auth);
