@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import 'core/config/theme_config.dart';
+import 'core/middleware/game_middleware.dart';
 import 'core/utils/methodes.dart';
 import 'view/screen/game.dart';
 
@@ -20,6 +21,12 @@ class GameApp extends StatelessWidget {
     theme: ThemeConfig.theme,
     themeMode: ThemeConfig.mode,
     initialRoute: '/game',
-    getPages: [GetPage(name: '/game', page: () => GamePage())],
+    getPages: [
+      GetPage(
+        name: '/game',
+        page: () => GamePage(),
+        middlewares: [GameMiddleware()],
+      ),
+    ],
   );
 }
