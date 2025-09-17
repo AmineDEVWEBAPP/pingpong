@@ -13,7 +13,7 @@ class GameController extends GetxController {
   double paddleX = 0;
   late SharedPreferences _sh;
   late int topScore;
-  late bool allowSounde;
+  late bool allowSound;
   double iconDrawerTurns = 0;
   int score = 0;
 
@@ -28,7 +28,7 @@ class GameController extends GetxController {
     bContr = BallController(this);
     _sh = await SharedPreferences.getInstance();
     topScore = _sh.getInt('topScore') ?? 0;
-    allowSounde = _sh.getBool('soundeAuth') ?? true;
+    allowSound = _sh.getBool('soundAuth') ?? true;
   }
 
   void start() {
@@ -62,7 +62,8 @@ class GameController extends GetxController {
   }
 
   Future<void> setSoundeAuth(bool auth) async {
-    allowSounde = auth;
-    await _sh.setBool('soundeAuth', auth);
+    logger('change sound auth to $auth');
+    allowSound = auth;
+    await _sh.setBool('soundAuth', auth);
   }
 }

@@ -1,5 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 
+import '../core/const/consts.dart';
 import '../core/const/enum.dart';
 import 'game_controller.dart';
 
@@ -11,6 +13,7 @@ class BallController {
   double _yd = -5;
   final double _sides = 195;
   final double topSide = -520;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   BallController(this._gContr);
 
@@ -34,6 +37,9 @@ class BallController {
     // top
     if (y < topSide && _yd.isNegative) {
       _yd = -_yd;
+      if (_gContr.allowSound) {
+        _audioPlayer.play(AssetSource(popPath));
+      }
     }
     // bottom
     bool atPaddle =

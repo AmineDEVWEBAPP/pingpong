@@ -63,7 +63,7 @@ class _GameDrawerState extends State<GameDrawer> {
               {'turn on': true},
               {'turn off': false},
             ],
-            groupValue: _gContr.allowSounde,
+            groupValue: _gContr.allowSound,
           ),
           Divider(),
           GameDrawerButton(
