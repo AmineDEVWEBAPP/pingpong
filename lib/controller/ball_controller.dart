@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 
@@ -12,11 +14,16 @@ class BallController {
   double _xd = 5;
   double _yd = -5;
   double _speed = 5;
-  final double _sides = 195;
-  final double topSide = -520;
+  late double sides;
+  late double topSide;
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   BallController(this._gContr);
+
+  void setBoundaries(Size size, double ballDiameter) {
+    sides = (size.width / 2) - (ballDiameter / 2);
+    topSide = -(size.height / 2.4) - (size.height * 0.17) - (ballDiameter / 2);
+  }
 
   reInit() {
     _speed = 5;
@@ -62,11 +69,11 @@ class BallController {
     }
 
     // lift
-    if (x.value < -_sides && _xd.isNegative) {
+    if (x.value < -sides && _xd.isNegative) {
       _xd = _speed;
     }
     // right
-    if (x.value > _sides && !_xd.isNegative) {
+    if (x.value > sides && !_xd.isNegative) {
       _xd = -_speed;
     }
   }

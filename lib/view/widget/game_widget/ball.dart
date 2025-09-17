@@ -15,8 +15,13 @@ class _BallState extends State<Ball> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Size size = MediaQuery.of(context).size;
+      double ballDiameter = size.width * 0.05;
+      _gContr.bContr.setBoundaries(size, ballDiameter);
+    });
     _gContr.ticker = createTicker((_) {
-      _gContr.bContr.moveStep(); // Move the ball on every tick
+      _gContr.bContr.moveStep();
     });
   }
 
