@@ -11,7 +11,7 @@ class BallController {
   RxDouble y = 0.0.obs;
   double _xd = 5;
   double _yd = -5;
-  double _speed = 40;
+  double _speed = 5;
   final double _sides = 195;
   final double topSide = -520;
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -46,8 +46,8 @@ class BallController {
     }
     // bottom
     bool atPaddle =
-        x.value >= _gContr.paddleX - 25 && x.value <= _gContr.paddleX + 25;
-    if (y.value + _yd > 0 && atPaddle) {
+        x.value >= _gContr.paddleX - 50 && x.value <= _gContr.paddleX + 50;
+    if (y.value < 10 && y.value > -1 && atPaddle) {
       _yd = -_speed;
       _gContr.score++;
       _gContr.update(['score']);
@@ -71,5 +71,7 @@ class BallController {
     }
   }
 
-  void _incrementSpeed() {}
+  void _incrementSpeed() {
+    _speed = (5 + _gContr.score).toDouble();
+  }
 }
